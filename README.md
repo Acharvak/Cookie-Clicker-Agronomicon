@@ -22,7 +22,7 @@ Try it
 ------
 To load the Agronomicon, put the following into the address bar on the tab with the game (after the game fully loads):
 
-    javascript:Game.LoadMod('https://bitbucket.org/Acharvak/cookie-clicker-agronomicon/Agronomicon.js')
+    javascript:Game.LoadMod('https://bitbucket.org/Acharvak/cookie-clicker-agronomicon/downloads/Agronomicon.js')
 
 and then press Enter/click “Go”. You can also open your browser’s console and run the same line in it, but without the ``javascript:`` part.
 
