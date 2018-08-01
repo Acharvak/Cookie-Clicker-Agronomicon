@@ -10,12 +10,12 @@ Playing [Cookie Clicker](http://orteil.dashnet.org/cookieclicker), doing some ga
 
 **This is not a cheat interface.** It won’t (at least yet) do any autogardening for you.
 
-**Fair warning: this mod is in beta, some things might not work.** Latest version: 2.0106.1 (beta).
+**Fair warning: this mod is in beta, some things might not work.** Latest version: 2.0109.1 (beta).
 
 
 Compatibility
 -------------
-Compatible with game version 2.0106 (the latest as of 13th June 2018). Tested in Chrome 66 and Firefox 60. Can be used together with [Cookie Monster](https://github.com/Aktanusa/CookieMonster) and probably other add-ons, as long as they don’t affect the garden (at least don’t completely change it).
+Compatible with game version 2.0109 (the latest as of 1st August 2018). Tested in Chrome and Firefox. Can be used together with [Cookie Monster](https://github.com/Aktanusa/CookieMonster) and probably other add-ons, as long as they don’t affect the garden (at least don’t completely change it).
 
 
 Try it
@@ -56,7 +56,7 @@ Preemptively Answered Questions
 -------------------------------
 **Q: The Agronomicon gives me this recipe for Drowsyfern: ``Mut.: 1 × Chocoroot (M) + 1 × Keenmoss (M) = 0.4875% (+1 OO at 4.9875%)``. How do I interpret this?**
 
-**A:** If an empty tile has one mature Chocoroot and one mature Keenmoss on its neighboring tiles, then a Drowsyfern may start growing on it with a probability of 0.4875%. One other plant may start growing on it instead of Drowsyfern with a probability of 4.9875% (another Keenmoss, actually). If there are other neighboring plants, the probabilities may change—after planting the seeds, you can hover over a tile to see the exact chances. Neghbors of a tile are the eight tiles surrounding it.  
+**A:** If an empty tile has one mature Chocoroot and one mature Keenmoss on its neighboring tiles, then a Drowsyfern may start growing on it with a probability of 0.4875%. One other plant may start growing on it instead of Drowsyfern with a probability of 4.9875% (another Keenmoss, actually). If there are other neighboring plants, the probabilities may change—after planting the seeds, you can hover over a tile to see the exact chances. Neighbors of a tile are the eight tiles surrounding it.  
 
 
 **Q: I have two tiles with the exact same neighbors, but the Agronomicon shows different probabilities for them. Why?**
