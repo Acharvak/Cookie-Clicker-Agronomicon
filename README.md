@@ -49,7 +49,7 @@ There are, unfortunately, some quirks that still have to be ironed out:
 * The probability shown for plant upgrades dropping doesn’t account for the “Seedless to nay” achievement. If you have it, the actual chance will be higher.
 * Probabilities for “mutation recipe outcomes” don’t account for the Wood Chips mutation bonus. But the probabilities shown when you hover over a tile do account for Wood Chips and all (or most) other modifiers.
 * If a tile is under an aging modifier or a weed/fungus repellent effect, then Agronomicon assumes this effect will stay the same next tick, even if it might change. In most cases it doesn’t matter in practice, though.
-* When you click on any tile, your soil selector will lock up for a couple of milliseconds. Also there may be slight lag if you start rapidly clicking on different tiles. This is due to how Agronomicon integrates its interface into the game—there are some better way, and I’ll hopefully implement one eventually, but it will require a surprisingly large amount of code.
+* When you click on any tile, your soil selector will lock up for a couple of milliseconds. Also there may be slight lag if you start rapidly clicking on different tiles. This is due to how Agronomicon integrates its interface into the game—there are some better ways, and I’ll hopefully implement one eventually, but it will require a surprisingly large amount of code.
 
 
 Preemptively Answered Questions
@@ -66,7 +66,7 @@ Preemptively Answered Questions
 
 **Q: Why do the probabilities that the Agronomicon shows me almost never match “base probabilities” listed [on the wiki](http://cookieclicker.wikia.com/wiki/Garden)?**
 
-**A:** as the wiki says, *“The exact probability can be calculated from [random list mechanism](http://cookieclicker.wikia.com/wiki/Random_list_mechanism). In general the actual number is close, but not equal, to the base chance (...)”* The Agronomicon show you the final probability, accounting for the “random list selection”.  
+**A:** As the wiki says, *“The exact probability can be calculated from [random list mechanism](http://cookieclicker.wikia.com/wiki/Random_list_mechanism). In general the actual number is close, but not equal, to the base chance (...)”* The Agronomicon shows you the final probability, accounting for the “random list mechanism”.  
 
 
 **Q: I found a bug, where do I report it?**
