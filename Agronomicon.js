@@ -26,10 +26,10 @@ SOFTWARE.
 
 // ======= DATA =======
 
-var VERSION = 2.012;
+var VERSION = 2.016;
 var REVISION = 1;       // <<<RELEASE: var REVISION = $REVISION;>>>
 var IS_DEV = true;      // <<<RELEASE: var IS_DEV = false;>>>
-var IS_BETA = true;     // <<<RELEASE: var IS_BETA = $IS_BETA;>>>
+var IS_BETA = false;    // <<<RELEASE: var IS_BETA = $IS_BETA;>>>
 
 var RECIPE_AUTOUNLOCKED = 1;
 var RECIPE_WEED = 2;

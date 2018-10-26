@@ -10,12 +10,12 @@ Playing [Cookie Clicker](http://orteil.dashnet.org/cookieclicker), doing some ga
 
 **This is not a cheat interface.** It won’t (at least yet) do any autogardening for you.
 
-**Fair warning: this mod is in beta, some things might not work.** Latest version: 2.012.1 (beta).
+**Latest version:** 2.016.1.
 
 
 Compatibility
 -------------
-Compatible with game version 2.012 (the latest as of 11th August 2018). Tested in Chrome and Firefox. Can be used together with [Cookie Monster](https://github.com/Aktanusa/CookieMonster) and probably other add-ons, as long as they don’t affect the garden (at least don’t completely change it).
+Compatible with game version 2.016 (the latest as of 26th October 2018). Tested in Chrome and Firefox. Can be used together with [Cookie Monster](https://github.com/Aktanusa/CookieMonster) and probably other add-ons, as long as they don’t affect the garden (at least don’t completely change it).
 
 
 Try it
