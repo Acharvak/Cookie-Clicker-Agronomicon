@@ -26,8 +26,8 @@ SOFTWARE.
 
 // ======= DATA =======
 
-var VERSION = 2.016;
-var REVISION = 1;       // <<<RELEASE: var REVISION = $REVISION;>>>
+var VERSION = 2.019;
+var REVISION = 0;       // <<<RELEASE: var REVISION = $REVISION;>>>
 var IS_DEV = true;      // <<<RELEASE: var IS_DEV = false;>>>
 var IS_BETA = false;    // <<<RELEASE: var IS_BETA = $IS_BETA;>>>
 
@@ -192,7 +192,7 @@ var calcProbAgingGT = function(N, ageTick, ageTickR, ageBoost) {
         // Probability that ageTick + ageTickR * Math.random() will be less than N - 1
         p1 = (N - 1 - ageTick) / ageTickR;
         p1 = Math.min(Math.max(p1, 0), 1);
-        
+
         // Probability that ageTick + ageTickR * Math.random() will be greater than N
         p2 = (ageTickR - N + ageTick) / ageTickR;
         p2 = Math.min(Math.max(p2, 0), 1);
@@ -211,7 +211,7 @@ var calcProbAgingGT = function(N, ageTick, ageTickR, ageBoost) {
          var b = (ageTick + ageTickR < N ? ageTickR % 1 : 1 - a);
          p3 = (1 - p1 - p2) * (a + b / 2);
     }
-    
+
     return p2 + p3;
 }
 
@@ -292,7 +292,7 @@ function GardenWrapper(garden, autoUnlocked, weedKey, weedProb, deathDrops, reci
             SS.recipes.push();
         }
     }
-    
+
     // The weed
     if(weedKey) {
         this.plantStatus[weedKey].recipes.push({
@@ -333,7 +333,7 @@ function GardenWrapper(garden, autoUnlocked, weedKey, weedProb, deathDrops, reci
             }
         }
     }
-    
+
     // Add other recipes
     for(var i = 0; i < recipes.length; ++i) {
         var pnt = {};
@@ -467,7 +467,7 @@ function GardenWrapper(garden, autoUnlocked, weedKey, weedProb, deathDrops, reci
         }
     }
     this.baseContamProbsBySoilId = bcpbs;
-    
+
     // Tile status
     var gpl = garden.plotLimits[garden.plotLimits.length - 1];
     this.maxPlotWidth = gpl[2] - gpl[0];
@@ -554,7 +554,7 @@ GardenWrapper.prototype.setPercentagePrecision = function(precision) {
             this.minPercentage = Math.pow(10, -precision - 2);
             this.minPercentageStr = '' + Math.pow(10, -precision) + '%';
             this.percentagePow10 = Math.pow(10, precision);
-       }       
+       }
     }
 }
 
@@ -929,7 +929,7 @@ GardenWrapper.prototype.recalculatePlantStatus = function() {
             }
         }
     }
-    
+
     // Check recipes and find unlockable plants; finalize totalProbGrowthNextTick
     for(var key in this.plantStatus) {
         var ps = this.plantStatus[key];
@@ -962,8 +962,8 @@ GardenWrapper.prototype.recalculatePlantStatus = function() {
             }
         }
     }
-    
-    
+
+
 }
 
 
@@ -984,7 +984,7 @@ var tileStatusHook = function(GWrapperAgronomicon, from) {
     gwrapper.recalculateAllTiles(gwrapper.garden.soilsById[gwrapper.garden.soil].key === 'woodchips' ? 3 : 1);
     gwrapper.recalculatePlantStatus();
     gwrapper.garden.buildPanel();  // TODO: maybe optimize it
-    
+
     // Do the alerts. TODO: rework the whole alert system, this one is just to get the mod out there quickly
     if(GWrapperAgronomicon.newTick) {
         GWrapperAgronomicon.newTick = false;
@@ -1119,12 +1119,16 @@ var tileTooltipHook = function(x, y) {
 var getPlantDescHook = function(me) {
     var desc = this.AcharvaksAgronomicon.oldGetPlantDesc.call(this, me);
     var ps = this.AcharvaksAgronomicon.wrapper.plantStatus[me.key];
+    var seedlessToNay = Game.HasAchiev('Seedless to nay');
+    var upgradeProbFactor = seedlessToNay ? 1.05 : 1;
+    var formattedUpgradeProb = upgradeProbFactor
+        * this.AcharvaksAgronomicon.wrapper.formatPercentage(ps.upgradeProb);
     if(ps && ps.upgradeName && !Game.HasUnlocked(ps.upgradeName)) {
         return desc.replace(/<\/div>$/,
                              '<div class="line"></div>' +
                              '<div style="text-align: center; white-space: nowrap;">' +
                              'When harvested mature, may drop <span class="green">' + ps.upgradeName +
-                             '</span> (<b>' + this.AcharvaksAgronomicon.wrapper.formatPercentage(ps.upgradeProb) + '</b>)</div></div>');
+                             '</span> (<b>' + formattedUpgradeProb  + '</b>)</div></div>');
     } else {
         return desc;
     }
@@ -1197,7 +1201,7 @@ var buildPanelHook = function() {
                     }
                 }
             }
-        }        
+        }
     }
 }
 
@@ -1275,7 +1279,7 @@ var UpdateMenuHook = function() {
                   '</div><div class="listing"' +
                   '<ul><li>Agronomicon version: ' + Agronomicon.versionString + '</li></ul>' +
                   '</div>';
-        
+
         var div = document.createElement('div');
         div.innerHTML = str;
         var menu = document.getElementById('menu');
@@ -1304,7 +1308,7 @@ var UpdateMenuHook = function() {
  * NOTE: if you're yourself developing a mod for Cookie Clicker and want to somehow
  * interface with the Agronomicon, your mod can get notified when Agronomicon is
  * about to be initialized or has already been initialized. To do so:
- * 
+ *
  * 1. Set window.AcharvaksAgronomicon to a new object (check if it already exists first).
  * 2. Set AcharvaksAgronomicon.preloadHooks and AcharvaksAgronomicon.postloadHooks to new arrays
  *      (again, check if they've already been set first).
@@ -1331,7 +1335,7 @@ var initialize = function() {
             return;
         }
         // Game must have been initialized at this point
-        if(Game.version != VERSION) {
+        if(Game.version != VERSION && !Game.prefs.AcharvaksAgronomicon_IgnoreVerMismatch) {
             var conf = confirm('Cookie Agronomicon ' + version_string
                                 + ' is intended for Cookie Clicker ' + VERSION + ', but you are running '
                                 + Game.version + '. Loading the mod may break the game.\n\nProceed anyway?');
@@ -1396,7 +1400,7 @@ var initialize = function() {
         if(Agronomicon.recipes === undefined) {
             Agronomicon.recipes = RECIPES;
         }
-        
+
         // Initializing settings
         // TODO: load saved settings
         Agronomicon.percentagePrecision = 4;
@@ -1430,14 +1434,14 @@ var initialize = function() {
                 Game.UpdateMenu();
             }
         }
-        
+
         // Call postload hooks, if any
         if(Agronomicon.postloadHooks) {
             for(var i = 0; i < Agronomicon.postloadHooks.length; ++i) {
                 (Agronomicon.postloadHooks[i])(Agronomicon);
             }
         }
-        
+
         var msg = 'Cookie Clicker Agronomicon loaded, version ' + version_string;
         if(Game.prefs.popups) {
             Game.Popup(msg);
@@ -1482,7 +1486,7 @@ var wrapGarden = function(garden_minigame, set_main) {
         wrapper: gwrapper,
         newTick: false,
     };
-    
+
     garden_minigame.buildPlot = buildPlotHook;
     garden_minigame.computeEffs = computeEffsHook;
     garden_minigame.buildPanel = buildPanelHook;
@@ -1495,7 +1499,7 @@ var wrapGarden = function(garden_minigame, set_main) {
     garden_minigame.toRebuild = true;
     garden_minigame.buildPlot();
     garden_minigame.buildPanel();
-    
+
     if(set_main) {
         Agronomicon.mainGardenWrapper = gwrapper;
     }
