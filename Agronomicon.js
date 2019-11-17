@@ -1,5 +1,6 @@
 /*
-Cookie Clicker Agronomicon by Acharvak, 2018
+Cookie Clicker Agronomicon by Acharvak, 2018–2019
+With contributions from Rebecca Turner
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +27,7 @@ SOFTWARE.
 
 // ======= DATA =======
 
-var VERSION = 2.019;
+var VERSION = 2.022;
 var REVISION = 0;       // <<<RELEASE: var REVISION = $REVISION;>>>
 var IS_DEV = true;      // <<<RELEASE: var IS_DEV = false;>>>
 var IS_BETA = false;    // <<<RELEASE: var IS_BETA = $IS_BETA;>>>
@@ -1121,8 +1122,8 @@ var getPlantDescHook = function(me) {
     var ps = this.AcharvaksAgronomicon.wrapper.plantStatus[me.key];
     var seedlessToNay = Game.HasAchiev('Seedless to nay');
     var upgradeProbFactor = seedlessToNay ? 1.05 : 1;
-    var formattedUpgradeProb = upgradeProbFactor
-        * this.AcharvaksAgronomicon.wrapper.formatPercentage(ps.upgradeProb);
+    var formattedUpgradeProb = this.AcharvaksAgronomicon.wrapper.formatPercentage(
+                                    upgradeProbFactor * ps.upgradeProb);
     if(ps && ps.upgradeName && !Game.HasUnlocked(ps.upgradeName)) {
         return desc.replace(/<\/div>$/,
                              '<div class="line"></div>' +
@@ -1251,6 +1252,12 @@ var saveCallback = function() {
                                        !!Game.prefs.AcharvaksAgronomicon_MDAlert]});
     if(window.localStorage) {
         window.localStorage.setItem('AcharvaksAgronomicon', str);
+        if(Game.prefs.AcharvaksAgronomicon_IgnoreVersionMismatch) {
+            window.localStorage.setItem('AcharvaksAgronomicon_IgnoreMismatchForVersion',
+                                        Game.version + '|' + Agronomicon.version + '|' + Agronomicon.revision);
+        } else {
+            window.localStorage.removeItem('AcharvaksAgronomicon_IgnoreMismatchForVersion');
+        }
     }
 }
 
@@ -1279,6 +1286,16 @@ var UpdateMenuHook = function() {
                   '</div><div class="listing"' +
                   '<ul><li>Agronomicon version: ' + Agronomicon.versionString + '</li></ul>' +
                   '</div>';
+
+        if(Agronomicon.isVersionMismatch) {
+            str += '<div style="color: red; margin: 1em 0em 0.5em 1em;">Agronomicon has been loaded despite version mismatch!</div>' +
+                   '<div style="margin-left: 4em;">' +
+                   Game.WriteButton('AcharvaksAgronomicon_IgnoreVersionMismatch',
+                                    'AcharvaksAgronomicon_IgnoreVersionMismatchButton',
+                                    'Always ignore mismatch for this version: ON',
+                                    'Always ignore mismatch for this version: OFF') +
+                   '</div>';
+        }
 
         var div = document.createElement('div');
         div.innerHTML = str;
@@ -1335,12 +1352,30 @@ var initialize = function() {
             return;
         }
         // Game must have been initialized at this point
-        if(Game.version != VERSION && !Game.prefs.AcharvaksAgronomicon_IgnoreVerMismatch) {
-            var conf = confirm('Cookie Agronomicon ' + version_string
-                                + ' is intended for Cookie Clicker ' + VERSION + ', but you are running '
-                                + Game.version + '. Loading the mod may break the game.\n\nProceed anyway?');
-            if(!conf) {
-                return;
+        var mismatch = false;
+        var ignoreMismatchFor = null;
+        if(Game.version != VERSION) {
+            mismatch = true;
+            if(localStorage) {
+                ignoreMismatchFor = localStorage.getItem('AcharvaksAgronomicon_IgnoreMismatchForVersion');
+            }
+            if(ignoreMismatchFor !== Game.version + '|' + VERSION + '|' + REVISION) {
+                var conf = confirm('Cookie Agronomicon ' + version_string
+                                    + ' is intended for Cookie Clicker ' + VERSION + ', but you are running '
+                                    + Game.version + '. Loading the mod may break the game.\n\nProceed anyway?');
+                if(!conf) {
+                    return;
+                }
+                alert('Loading Agronomicon. You can choose to always ignore this version mismatch in the settings.');
+                Game.prefs.AcharvaksAgronomicon_IgnoreVersionMismatch = false;
+            } else {
+                Game.prefs.AcharvaksAgronomicon_IgnoreVersionMismatch = true;
+            }
+        } else if(localStorage) {
+            // Reset if it's set for a previous version
+            Game.prefs.AcharvaksAgronomicon_IgnoreVersionMismatch = false;
+            if(localStorage) {
+                localStorage.removeItem('AcharvaksAgronomicon_IgnoreMismatchForVersion');
             }
         }
         if(window.AcharvaksAgronomicon === undefined) {
@@ -1367,6 +1402,7 @@ var initialize = function() {
         Agronomicon.versionString = version_string;
         Agronomicon.SOUND1_URL = SOUND1_URL;
         Agronomicon.SOUND2_URL = SOUND2_URL;
+        Agronomicon.isVersionMismatch = mismatch;
 
         if(Agronomicon.GardenWrapper === undefined) {
             Agronomicon.GardenWrapper = GardenWrapper;
@@ -1506,7 +1542,7 @@ var wrapGarden = function(garden_minigame, set_main) {
 }
 
 // Alert audio files - TODO: maybe replace, allow custom URLs
-// They were created by myself as MIDI, then converted to MP3
+// They were created by myself (Acharvak) as MIDI, then converted to MP3
 var SOUND1_URL = 'data:audio/mpeg;base64,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15+7t2NIhXT6vVC38ZCHtzPzrVUOyUehU7s09Vu1b/mYleud/+MoxNEVEAplnhBEAtWmrWm0kZVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAmn+SSQABfenZur9/o2u9P/7/tbRWW+v13dvYt7f6LGf/+MoxNQV1G5+XhBEvrP6W0/X9CpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqiFG3JLbbsAAfqHu5U6VeItt0ss7EssezuWPZ3DsRLBUJB2RJeGkxLiU7hr/Ep0tiLlud6j2o98sGodK1Dzr6w0Ij2JXEQ0i/+MoxKQJyAZ1nghEAtKnQ6Jf+VoKyO223XbAABYQh4uouDgLgoMEagJiQXEoqCoKBCyFwWZey3805RR6C0UjTjRIEehuO17m5RpwkCAhZjkZGSz9goIHY6GTLJUP/JZf7LY5GrKGDAwjo8pEeasFDAwYR0Mjsln8s//stmR7WNY/9nkasoIGDBOhl/L+rWSw/+MoxMoTYAZyXghEAsjKWz////lkuZMstlQ/n/mrAwQKIOW+r+VV1UxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxP8ljBmSXkmGVVVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxHwAAANIAAAAAFVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxHwAAANIAAAAAFVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxHwAAANIAAAAAFVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxHwAAANIAAAAAFVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxHwAAANIAAAAAFVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxHwAAANIAAAAAFVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxHwAAANIAAAAAFVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxHwAAANIAAAAAFVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxHwAAANIAAAAAFVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxHwAAANIAAAAAFVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxHwAAANIAAAAAFVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxHwAAANIAAAAAFVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxHwAAANIAAAAAFVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MoxHwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';
 
 var SOUND2_URL = 'data:audio/mpeg;base64,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/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MoxHwAAANIAAAAAKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq';

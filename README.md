@@ -10,12 +10,12 @@ Playing [Cookie Clicker](http://orteil.dashnet.org/cookieclicker), doing some ga
 
 **This is not a cheat interface.** It won’t (at least yet) do any autogardening for you.
 
-**Latest version:** 2.019
+**Latest version:** 2.022
 
 
 Compatibility
 -------------
-Compatible with game version 2.019 (the latest as of 26th October 2018). Tested in Chrome and Firefox. Can be used together with [Cookie Monster](https://github.com/Aktanusa/CookieMonster) and probably other add-ons, as long as they don’t affect the garden (at least don’t completely change it).
+Compatible with game version 2.022 (the latest as of 17th November 2019). Tested in Chrome and Firefox. Can be used together with [Cookie Monster](https://github.com/Aktanusa/CookieMonster) and probably other add-ons, as long as they don’t affect the garden (at least don’t completely change it).
 
 
 Try it
@@ -46,7 +46,6 @@ Limitations
 -----------
 There are, unfortunately, some quirks that still have to be ironed out:
 
-* The probability shown for plant upgrades dropping doesn’t account for the “Seedless to nay” achievement. If you have it, the actual chance will be higher.
 * Probabilities for “mutation recipe outcomes” don’t account for the Wood Chips mutation bonus. But the probabilities shown when you hover over a tile do account for Wood Chips and all (or most) other modifiers.
 * If a tile is under an aging modifier or a weed/fungus repellent effect, then Agronomicon assumes this effect will stay the same next tick, even if it might change. In most cases it doesn’t matter in practice, though.
 * When you click on any tile, your soil selector will lock up for a couple of milliseconds. Also there may be slight lag if you start rapidly clicking on different tiles. This is due to how Agronomicon integrates its interface into the game—there are some better ways, and I’ll hopefully implement one eventually, but it will require a surprisingly large amount of code.
@@ -85,7 +84,7 @@ License
 -------
 **The Cookie Clicker game was written by Orteil and Opti. Cookie Clicker Agronomicon is a third-party add-on for it, its author is not affiliated with Orteil or Opti nor has any copyright on the original game.**
 
-Cookie Clicker Agronomicon, including this Readme, was written by Acharvak, 2018
+Cookie Clicker Agronomicon, including this Readme, was written by Acharvak and contributors, 2018–2019
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
