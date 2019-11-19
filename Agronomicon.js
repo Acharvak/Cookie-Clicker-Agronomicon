@@ -1,6 +1,6 @@
 /*
 Cookie Clicker Agronomicon by Acharvak, 2018–2019
-With contributions from Rebecca Turner
+With contributions by Rebecca Turner
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
