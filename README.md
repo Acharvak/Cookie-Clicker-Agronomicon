@@ -12,7 +12,7 @@ Playing [Cookie Clicker](http://orteil.dashnet.org/cookieclicker), doing some ga
 
 **Latest version:** 2.022
 
-**Important notice:** I’m not much into clicking cookies these days. If someone wants to take over this mod or integrate it into a larger mod, please drop me a line. I’ll keep supporting this mod for the time being, though.
+**Important notice:** I’m not much into clicking cookies these days. If someone wants to take over this mod or integrate it into a larger mod, please [open an issue in the tracker](https://github.com/Acharvak/Cookie-Clicker-Agronomicon/issues). I’ll keep supporting this mod for the time being, though.
 
 
 Compatibility
