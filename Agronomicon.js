@@ -1,5 +1,5 @@
 /*
-Cookie Clicker Agronomicon by Acharvak, 2018–2019
+Cookie Clicker Agronomicon by Acharvak, 2018–2020
 With contributions by Rebecca Turner
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,10 +27,11 @@ SOFTWARE.
 
 // ======= DATA =======
 
-var VERSION = 2.022;
-var REVISION = 0;       // <<<RELEASE: var REVISION = $REVISION;>>>
-var IS_DEV = true;      // <<<RELEASE: var IS_DEV = false;>>>
-var IS_BETA = false;    // <<<RELEASE: var IS_BETA = $IS_BETA;>>>
+var VERSION = 2.022;    // Should match the game version
+var REVISION = 0;       // If not 0, the version of the script will be e.g. "2.022
+var IS_DEV = false;     // If true, the version will be e.g. "2.022-next"
+var IS_BETA = false;    // If true, the version display will show "(beta)" after the version
+                        // No other effects for now.
 
 var RECIPE_AUTOUNLOCKED = 1;
 var RECIPE_WEED = 2;

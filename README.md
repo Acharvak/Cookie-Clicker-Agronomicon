@@ -12,6 +12,8 @@ Playing [Cookie Clicker](http://orteil.dashnet.org/cookieclicker), doing some ga
 
 **Latest version:** 2.022
 
+**Important notice:** I’m not much into clicking cookies these days. If someone wants to take over this mod or integrate it into a larger mod, please drop me a line. I’ll keep supporting this mod for the time being, though.
+
 
 Compatibility
 -------------
@@ -20,26 +22,28 @@ Compatible with game version 2.022 (the latest as of 17th November 2019). Tested
 
 Try it
 ------
-To load the Agronomicon, put the following into the address bar on the tab with the game (after the game fully loads):
+To load the Agronomicon, go to [the game’s page](http://orteil.dashnet.org/cookieclicker), wait for it to fully load, open your browser’s console (depends on the browser, but usually possible by right-clicking, selecting “Inspect” or “Inspect Element”, then finding and clicking on the “Console” button), and enter the following:
 
-    javascript:Game.LoadMod('https://bitbucket.org/Acharvak/cookie-clicker-agronomicon/downloads/Agronomicon.js')
+    Game.LoadMod('https://acharvak.github.io/Cookie-Clicker-Agronomicon/Agronomicon.js')
 
-and then press Enter/click “Go”. You can also open your browser’s console and run the same line in it, but without the ``javascript:`` part.
+and then press Enter. If you copy and paste the command, some browsers may demand confirmation that you know what you’re doing.
 
 
 Run it every time
 -----------------
 If you want to load the Agronomicon every time you start the game, there’s a *userscript* to do that.
 
-First, install [Tampermonkey](https://tampermonkey.net/) or a compatible extension for your browser to run userscripts.
+First, install [Greasemonkey for Firefox](https://addons.mozilla.org/firefox/addon/greasemonkey/), or [Tampermonkey](https://tampermonkey.net/) (available for various browsers), or a compatible extension that will let your browser run userscripts.
 
-Then click this link:
+Then click on the link below. You will likely be prompted to install the userscript. If program code is shown to you instead, copy the entire code and save it in your userscript manager as a new script (consult the documentation for your userscript manager on how to do it).
 
-* [https://bitbucket.org/Acharvak/cookie-clicker-agronomicon/downloads/AgronomiconLoader.user.js](https://bitbucket.org/Acharvak/cookie-clicker-agronomicon/downloads/AgronomiconLoader.user.js)
+**Link to the userscript**:
 
-Tampermonkey should offer to install the user script right away (instead of opening or downloading the file normally).
+* https://acharvak.github.io/Cookie-Clicker-Agronomicon/AgronomiconLoader.user.js
 
-**Privacy-related notice:** this userscript is only a loader, the actual Agronomicon will be downloaded from Bitbucket every time.
+**Privacy-related notice:** this userscript is only a loader, the actual Agronomicon will be downloaded from GitHub every time you open the game’s page.
+
+**Upgrade notice:** if you have an old version of the userscript (one that loads from bitbucket.org), uninstall it before installing the new version using the link above.
 
 
 Limitations
@@ -53,9 +57,9 @@ There are, unfortunately, some quirks that still have to be ironed out:
 
 Preemptively Answered Questions
 -------------------------------
-**Q: The Agronomicon gives me this recipe for Drowsyfern: ``Mut.: 1 × Chocoroot (M) + 1 × Keenmoss (M) = 0.4875% (+1 OO at 4.9875%)``. How do I interpret this?**
+**Q: The Agronomicon gives me this recipe for Drowsyfern: ``Mut.: 1 × Chocoroot (M) + 1 × Keenmoss (M) = 0.4875% (+1 OO at 4.9875%)``. How do I read this?**
 
-**A:** If an empty tile has one mature Chocoroot and one mature Keenmoss on its neighboring tiles, then a Drowsyfern may start growing on it with a probability of 0.4875%. One other plant may start growing on it instead of Drowsyfern with a probability of 4.9875% (another Keenmoss, actually). If there are other neighboring plants, the probabilities may change—after planting the seeds, you can hover over a tile to see the exact chances. Neighbors of a tile are the eight tiles surrounding it.  
+**A:** If an empty tile has one mature Chocoroot and one mature Keenmoss on its neighboring tiles, then a Drowsyfern may start growing on it with a probability of 0.4875%. One other plant (“OO” meaning “Other Outcome(s)”) may start growing on it instead of Drowsyfern with a probability of 4.9875% (another Keenmoss, actually, although it isn’t stated directly). If there are other neighboring plants, the probabilities may change—after planting the seeds, you can hover over a tile to see the exact chances. Neighbors of a tile are the eight tiles surrounding it.
 
 
 **Q: I have two tiles with the exact same neighbors, but the Agronomicon shows different probabilities for them. Why?**
@@ -70,21 +74,21 @@ Preemptively Answered Questions
 
 **Q: I found a bug, where do I report it?**
 
-**A:** In the [issue tracker](https://bitbucket.org/Acharvak/cookie-clicker-agronomicon/issues). Please search it before reporting, make sure your issue hasn’t been reported already. Include a screenshot or a saved game (preferably as a file attachment), if it’s relevant. Currently you don’t need a Bitbucket account to report issues, but do check from time to time to see if there has been any progress on it.  
+**A:** In the [issue tracker](https://github.com/Acharvak/Cookie-Clicker-Agronomicon/issues). Please include a screenshot or a saved game (preferably as a file attachment), if it’s relevant. You will, unfortunately, need a GitHub account to report an issue, but signing up is very easy.
 
 
 **Q: I have a question, where do I ask it?**
 
 **A:** If you have a Reddit account, preferably on [/r/cookieclicker](https://reddit.com/r/cookieclicker). I read it from time to time (my Reddit username is Acharvak), and there are other people there who may be able to help you.
 
-Alternatively, you can create an issue in the [issue tracker](https://bitbucket.org/Acharvak/cookie-clicker-agronomicon/issues), although since hardly anyone but me reads it, you might not get an answer quickly.
+Alternatively, you can create an issue in the [issue tracker](https://github.com/Acharvak/Cookie-Clicker-Agronomicon/issues), although since hardly anyone but me reads it, you might not get an answer quickly.
 
 
 License
 -------
 **The Cookie Clicker game was written by Orteil and Opti. Cookie Clicker Agronomicon is a third-party add-on for it, its author is not affiliated with Orteil or Opti nor has any copyright on the original game.**
 
-Cookie Clicker Agronomicon, including this Readme, was written by Acharvak and contributors, 2018–2019
+Cookie Clicker Agronomicon, including this Readme, was written by Acharvak and contributors, 2018–2020
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -103,3 +107,8 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+Migration Notice
+----------------
+This mod was previously hosted on [Bitbucket](https://bitbucket.org/Acharvak/). Since Bitbucket ceased supporting the Mercurial version control system, the mod has been moved over to [its current page](https://github.com/Acharvak/Cookie-Clicker-Agronomicon) on GitHub.
