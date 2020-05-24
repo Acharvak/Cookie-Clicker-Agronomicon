@@ -41,9 +41,9 @@ Then click on the link below. You will likely be prompted to install the userscr
 
 * https://acharvak.github.io/Cookie-Clicker-Agronomicon/AgronomiconLoader.user.js
 
-**Privacy-related notice:** this userscript is only a loader, the actual Agronomicon will be downloaded from GitHub every time you open the game’s page.
-
 **Upgrade notice:** if you have an old version of the userscript (one that loads from bitbucket.org), uninstall it before installing the new version using the link above.
+
+**Privacy-related notice:** this userscript is only a loader, the actual Agronomicon will be downloaded from GitHub every time you open the game’s page.
 
 
 Limitations
